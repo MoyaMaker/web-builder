@@ -15,6 +15,7 @@ import {
 import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 const tabsSections = [
   {
@@ -37,6 +38,14 @@ export default function LeftSidebarLayout({
   const pathname = usePathname();
   const { setOpenLeftSidebar } = useBuilderLayout();
 
+  const sectionActive = useMemo(
+    () =>
+      pathname === "/builder"
+        ? tabsSections[0]
+        : tabsSections.find((sec) => pathname.includes(sec.value)),
+    [pathname]
+  );
+
   return (
     <aside className="text-sm">
       <header className="h-14 flex items-center gap-2 p-2">
@@ -53,9 +62,7 @@ export default function LeftSidebarLayout({
           <TooltipContent side="bottom">Minimizar panel</TooltipContent>
         </Tooltip>
 
-        <span>
-          {tabsSections.find((sec) => pathname.includes(sec.value))?.name}
-        </span>
+        <span>{sectionActive?.name}</span>
       </header>
 
       <Separator />
@@ -65,7 +72,9 @@ export default function LeftSidebarLayout({
           <Tooltip key={tab.name}>
             <TooltipTrigger asChild>
               <Button
-                variant={pathname.includes(tab.value) ? "default" : "ghost"}
+                variant={
+                  sectionActive?.value === tab.value ? "default" : "ghost"
+                }
                 size="icon"
                 asChild
               >
