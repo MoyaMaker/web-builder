@@ -10,7 +10,11 @@ import {
 } from "@/lib/components/ui/tooltip";
 import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
 
-export default function RightSidebar() {
+export default function LeftSidebarLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { setOpenRightSidebar } = useBuilderLayout();
 
   return (
@@ -32,7 +36,7 @@ export default function RightSidebar() {
 
       <Separator />
 
-      <section className="p-2">hello</section>
+      {children}
     </aside>
   );
 }

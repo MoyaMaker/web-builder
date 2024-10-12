@@ -15,8 +15,8 @@ import {
 
 type LayoutContentProps = {
   children: React.ReactNode;
-  leftsidebar: React.ReactNode;
-  rightsidebar: React.ReactNode;
+  leftSidebar: React.ReactNode;
+  rightSidebar: React.ReactNode;
 };
 
 export default function BuilderLayout({ ...children }: LayoutContentProps) {
@@ -29,8 +29,8 @@ export default function BuilderLayout({ ...children }: LayoutContentProps) {
 
 const LayoutContent = ({
   children,
-  leftsidebar,
-  rightsidebar,
+  leftSidebar,
+  rightSidebar,
 }: LayoutContentProps) => {
   const refLeftSidebar = useRef<ImperativePanelHandle>(null);
   const refRightSidebar = useRef<ImperativePanelHandle>(null);
@@ -72,7 +72,7 @@ const LayoutContent = ({
           onResize={() => setOpenLeftSidebar(true)}
         >
           <ScrollArea className="h-[calc(100vh-4.0625rem)]">
-            {leftsidebar}
+            {leftSidebar}
           </ScrollArea>
         </ResizablePanel>
         <ResizableHandle />
@@ -94,7 +94,7 @@ const LayoutContent = ({
           onResize={() => setOpenRightSidebar(true)}
         >
           <ScrollArea className="h-[calc(100vh-4.0625rem)]">
-            {rightsidebar}
+            {rightSidebar}
           </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>
