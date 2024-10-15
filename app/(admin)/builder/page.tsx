@@ -1,28 +1,26 @@
 "use client";
 import { useRef } from "react";
 import { useDrop } from "react-dnd";
-import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react";
 
-import { Button } from "@/lib/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/lib/components/ui/tooltip";
-import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
+  OpenLeftSidebar,
+  OpenRightSidebar,
+} from "./components/open-sidebar-button";
 import { cn } from "@/lib/utils";
+import { useTreeComponents } from "@/lib/providers/tree-components-provider";
+import { ComponentNameType } from "@/lib/constants/components-definition";
+import { BuilderComponent } from "./components/builder-component";
+import { DropContainer } from "@/lib/components/builder/drop-container";
 
 export default function Builder() {
   const ref = useRef<HTMLDivElement>(null);
+  const { components, setSelectedComponent } = useTreeComponents();
 
   const [{ isOver }, drop] = useDrop({
-    accept: ["COMPONENT"],
+    accept: ["NEW_COMPONENT", "COMPONENT"],
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
-    drop(item, monitor) {
-      console.log(item, monitor);
-    },
   });
 
   drop(ref);
@@ -40,52 +38,20 @@ export default function Builder() {
       <div
         ref={ref}
         className={cn(
-          "h-full border-2 border-dashed",
+          "h-full flex flex-col border-2 border-dashed p-4",
           isOver ? "border-green-500" : "border-zinc-200 dark:border-zinc-800"
         )}
-      ></div>
+        onClick={() => setSelectedComponent(undefined)}
+      >
+        <BuilderComponent components={components} />
+        <DropContainer path={components?.length?.toString() ?? "0"} isLast />
+      </div>
+      {/* <div>
+        <pre className="text-xs">
+          {JSON.stringify(selectedComponent, null, 2)}
+        </pre>
+        <pre className="text-xs">{JSON.stringify(components, null, 2)}</pre>
+      </div> */}
     </section>
   );
 }
-
-const OpenLeftSidebar = () => {
-  const { isOpenLeftSidebar, setOpenLeftSidebar } = useBuilderLayout();
-
-  return (
-    !isOpenLeftSidebar && (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setOpenLeftSidebar(true)}
-          >
-            <PanelLeftOpenIcon className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">Expandir panel</TooltipContent>
-      </Tooltip>
-    )
-  );
-};
-
-const OpenRightSidebar = () => {
-  const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayout();
-
-  return (
-    !isOpenRightSidebar && (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setOpenRightSidebar(true)}
-          >
-            <PanelRightOpenIcon className="w-4 h-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">Expandir panel</TooltipContent>
-      </Tooltip>
-    )
-  );
-};
