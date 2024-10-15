@@ -23,8 +23,7 @@ export function BuilderComponent({
   return components?.map((component, index) => (
     <DraggableComponent
       key={component.id}
-      path={path}
-      index={index}
+      path={path ?? index.toString()}
       component={component}
     />
   ));
@@ -32,11 +31,9 @@ export function BuilderComponent({
 
 const DraggableComponent = ({
   path,
-  index,
   component,
 }: {
-  path?: string;
-  index: number;
+  path: string;
   component: IComponent;
 }) => {
   const { setSelectedComponent } = useTreeComponents();
@@ -50,7 +47,10 @@ const DraggableComponent = ({
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    item: component,
+    item: {
+      component,
+      path,
+    },
   });
 
   drag(ref);
@@ -58,7 +58,7 @@ const DraggableComponent = ({
 
   return (
     <div id={component.id}>
-      <DropContainer path={path ?? index.toString()} />
+      <DropContainer path={path} />
       {isDragging && (
         <div ref={refPreview} className="w-full h-2 bg-green-500/50" />
       )}
@@ -71,7 +71,7 @@ const DraggableComponent = ({
         }}
       >
         <SelectedComponent component={component} />
-        <Element component={component} path={path ?? index.toString()} />
+        <Element component={component} path={path} />
       </div>
     </div>
   );

@@ -26,8 +26,11 @@ export function DropContainer({
     }),
     drop: (item, monitor) => {
       if (monitor.getItemType() === "COMPONENT") {
-        const component = item as IComponent;
-        console.log(component, path);
+        const { component, path: actualPath } = item as {
+          component: IComponent;
+          path: string;
+        };
+        console.log(component, actualPath, path);
       } else if (monitor.getItemType() === "NEW_COMPONENT") {
         const { type } = item as { type: ComponentNameType };
         createComponent(type, path);

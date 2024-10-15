@@ -14,7 +14,7 @@ export function ContainerBuilder({
   const { children } = component;
 
   return (
-    <div className="border border-dashed">
+    <div className="border border-dashed border-zinc-200 dark:border-zinc-800">
       <BuilderComponent
         components={children}
         path={`${path}-${children?.length ?? 0}`}
