@@ -6,6 +6,7 @@ import {
 import { DndProvider } from "@/lib/providers/dnd-provider";
 import { BuilderLayoutProvider } from "@/lib/providers/builder-layout-provider";
 import { TreeComponentsProvider } from "@/lib/providers/tree-components-provider";
+import { ScrollArea } from "@/lib/components/ui/scroll-area";
 
 type LayoutContentProps = {
   children: React.ReactNode;
@@ -32,9 +33,9 @@ export default function BuilderLayout({
                 collapsible={false}
                 className="flex"
               >
-                {/* <ScrollArea className="h-[calc(100vh-4.0625rem)]">
-            </ScrollArea> */}
-                {children}
+                <ScrollArea className="w-full h-[calc(100vh-4.0625rem)]">
+                  {children}
+                </ScrollArea>
               </ResizablePanel>
               <ResizableHandle />
               {rightSidebar}

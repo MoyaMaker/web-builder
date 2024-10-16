@@ -8,16 +8,18 @@ export function InputBuilder({ component }: { component: InputType }) {
   const { attributes } = component;
 
   return (
-    <fieldset className="grid gap-2 pointer-events-none">
-      <Label
-        htmlFor={component.id}
-        className={cn(
-          attributes.required &&
-            "after:content-['*'] after:ml-0.5 after:text-red-500"
-        )}
-      >
-        {attributes.label}
-      </Label>
+    <fieldset className={cn("grid gap-2 pointer-events-none")}>
+      {attributes.label && (
+        <Label
+          htmlFor={component.id}
+          className={cn(
+            attributes.required &&
+              "after:content-['*'] after:ml-0.5 after:text-red-500"
+          )}
+        >
+          {attributes.label}
+        </Label>
+      )}
       <Input id={component.id} type="text" {...attributes} />
     </fieldset>
   );

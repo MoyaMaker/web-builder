@@ -10,7 +10,7 @@ import { IComponent } from "@/lib/schemas/component-base-schema";
 import { Button } from "@/lib/components/ui/button";
 import { CopyIcon, Trash2Icon } from "lucide-react";
 import { DropContainer } from "@/lib/components/builder/drop-container";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 
 export function BuilderComponent({
@@ -36,13 +36,14 @@ const DraggableComponent = ({
   path: string;
   component: IComponent;
 }) => {
-  const { setSelectedComponent } = useTreeComponents();
+  const { isSelecting, setSelectedComponent } = useTreeComponents();
   const ref = useRef<HTMLDivElement>(null);
-  const refPreview = useRef<HTMLDivElement>(null);
   const type = component.type as ComponentNameType;
   const Element = COMPONENTS_JSX_ELEMENTS[type];
 
-  const [{ isDragging }, drag, preview] = useDrag({
+  const [isHovered, setIsHovered] = useState(false);
+
+  const [{ isDragging }, drag] = useDrag({
     type: "COMPONENT",
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -54,23 +55,45 @@ const DraggableComponent = ({
   });
 
   drag(ref);
-  preview(refPreview);
+
+  const handleMouseEnter = () => {
+    if (isSelecting && !isDragging) setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (isSelecting && !isDragging) setIsHovered(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      setIsHovered(false);
+    }
+  }, [isDragging]);
 
   return (
     <div id={component.id}>
       <DropContainer path={path} />
-      {isDragging && (
-        <div ref={refPreview} className="w-full h-2 bg-green-500/50" />
-      )}
       <div
         ref={ref}
-        className={cn("relative hover:cursor-pointer", isDragging && "hidden")}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className={cn(
+          "relative hover:cursor-pointer group",
+          isDragging && "opacity-30 pointer-events-none"
+        )}
         onClick={(e) => {
           setSelectedComponent(component);
           e.stopPropagation();
         }}
       >
-        <SelectedComponent component={component} />
+        {isHovered && (
+          <div
+            className={cn(
+              "absolute w-full h-full group-hover:ring-1 group-hover:ring-white pointer-events-none bg-white/10"
+            )}
+          />
+        )}
+        {!isDragging && <SelectedComponent component={component} />}
         <Element component={component} path={path} />
       </div>
     </div>

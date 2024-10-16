@@ -44,7 +44,7 @@ export default function LeftSidebarLayout({
     <ResizablePanel
       ref={refRightSidebar}
       order={3}
-      defaultSize={20}
+      defaultSize={15}
       minSize={15}
       maxSize={20}
       collapsible={true}

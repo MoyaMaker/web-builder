@@ -7,7 +7,7 @@ export const ComponentBaseSchema = z.object({
   attributes: z.object({}),
 });
 
-export type IComponent<T = {}> = z.infer<typeof ComponentBaseSchema> & {
+export type IComponent<T = object> = z.infer<typeof ComponentBaseSchema> & {
   attributes: T;
   children?: IComponent[];
 };

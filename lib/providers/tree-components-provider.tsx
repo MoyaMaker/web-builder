@@ -10,11 +10,20 @@ import { IComponent } from "../schemas/component-base-schema";
 import {
   ComponentNameType,
   COMPONENTS_SCHEMAS,
-  COMPONENTS_DEFAULT_ATTRIBUTES,
+  COMPONENTS_DEFAULT_DATA,
 } from "../constants/components-definition";
 import { generateId } from "../helpers/generate-id";
+import {
+  adjustPath,
+  getPath,
+  getPathArray,
+  insertAtPath,
+  removeAtPath,
+} from "../helpers/path-helpers";
 
 type TreeComponentsContextType = {
+  isSelecting: boolean;
+  setIsSelecting: Dispatch<SetStateAction<boolean>>;
   components: IComponent[] | undefined;
   selectedComponent: IComponent | undefined;
   setSelectedComponent: Dispatch<SetStateAction<IComponent | undefined>>;
@@ -26,6 +35,7 @@ type TreeComponentsContextType = {
   ): void;
   copyComponent(component: IComponent): void;
   removeComponent(id: string): void;
+  moveComponent(component: IComponent, path: string): void;
 };
 
 const TreeComponentsContext = createContext<TreeComponentsContextType | null>(
@@ -35,6 +45,7 @@ const TreeComponentsContext = createContext<TreeComponentsContextType | null>(
 export const TreeComponentsProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }: { children: React.ReactNode }) => {
+  const [isSelecting, setIsSelecting] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState<
     IComponent | undefined
   >();
@@ -43,10 +54,11 @@ export const TreeComponentsProvider: React.FC<{
   const createComponent = (type: ComponentNameType, path: string) => {
     const schema = COMPONENTS_SCHEMAS[type];
 
+    const defaultData = COMPONENTS_DEFAULT_DATA[type];
     const component: IComponent = {
+      ...defaultData,
       id: `${type}_${generateId()}`,
       type,
-      attributes: COMPONENTS_DEFAULT_ATTRIBUTES[type],
       valid: false,
     };
 
@@ -60,16 +72,15 @@ export const TreeComponentsProvider: React.FC<{
 
     component.valid = componentParse.success;
 
-    addComponent(component);
+    addComponent(component, path);
   };
 
-  const addComponent = (component: IComponent) => {
-    setComponents((prevComponents) => {
-      if (!prevComponents) {
-        return [component];
-      }
-      return [...prevComponents, component];
-    });
+  const addComponent = (component: IComponent, path: string) => {
+    const prevComponents = [...(components ?? [])];
+
+    insertAtPath(component, path, prevComponents);
+
+    setComponents(prevComponents);
   };
 
   const updateComponentAttributes = (
@@ -77,10 +88,12 @@ export const TreeComponentsProvider: React.FC<{
     valid: boolean,
     attributes: IComponent["attributes"]
   ) => {
-    setComponents((prevComponents) => {
-      if (!prevComponents) return prevComponents;
+    const prevComponents = [...(components ?? [])];
 
-      return prevComponents.map((component) =>
+    if (!prevComponents) return prevComponents;
+
+    setComponents(
+      prevComponents.map((component) =>
         component.id === id
           ? {
               ...component,
@@ -88,28 +101,68 @@ export const TreeComponentsProvider: React.FC<{
               attributes,
             }
           : component
-      );
-    });
+      )
+    );
+  };
+
+  const updateChildrenId = (children: IComponent[]) => {
+    for (let index = 0; index < children.length; index++) {
+      children[index].id = `${children[index].type}_${generateId()}`;
+
+      if (children[index]?.children) {
+        return updateChildrenId(children[index].children!);
+      }
+    }
+
+    return children;
   };
 
   const copyComponent = (component: IComponent) => {
-    const newComponent = { ...component };
-    newComponent.id = `${component.type}_${generateId()}`;
-    addComponent(newComponent);
+    const newComponent = JSON.parse(JSON.stringify(component));
+    newComponent.id = `${newComponent.type}_${generateId()}`;
+    if (newComponent?.children)
+      newComponent.children = updateChildrenId(newComponent.children);
+    const path = getPath(component.id, components ?? []);
+    if (!path) return;
+
+    const pathArray = getPathArray(path);
+    const newPath = pathArray
+      .map((p, i) => (i === pathArray.length - 1 ? p + 1 : p))
+      .join("-");
+
+    addComponent(newComponent, newPath);
   };
 
   const removeComponent = (id: string) => {
-    setComponents((prevComponents) => {
-      if (!prevComponents) return prevComponents;
+    const prevComponents = [...(components ?? [])];
+    const path = getPath(id, prevComponents);
+    if (!path) return;
+    removeAtPath(prevComponents, path);
 
-      return prevComponents.filter((component) => component.id !== id);
-    });
+    setComponents(prevComponents);
     setSelectedComponent(undefined);
+  };
+
+  const moveComponent = (component: IComponent, path: string) => {
+    const prevComponents = [...(components ?? [])];
+
+    const sourcePath = getPath(component.id, prevComponents);
+    if (!sourcePath) return;
+
+    removeAtPath(prevComponents, sourcePath);
+
+    const adjustedPath = adjustPath(path, sourcePath);
+
+    insertAtPath(component, adjustedPath, prevComponents);
+
+    setComponents(prevComponents);
   };
 
   return (
     <TreeComponentsContext.Provider
       value={{
+        isSelecting,
+        setIsSelecting,
         components,
         selectedComponent,
         setSelectedComponent,
@@ -117,6 +170,7 @@ export const TreeComponentsProvider: React.FC<{
         updateComponentAttributes,
         copyComponent,
         removeComponent,
+        moveComponent,
       }}
     >
       {children}

@@ -20,7 +20,7 @@ import { TextAttributes, TextSchema } from "../schemas/text-scheme";
 import { FontSize } from "./font-size";
 import { ButtonAttributes, ButtonSchema } from "../schemas/button-schema";
 import { FormAttributes, FormSchema } from "../schemas/form-schema";
-import { NumberAttributes, NumberSchema } from "../schemas/number-schema";
+import { NumberSchema, NumberType } from "../schemas/number-schema";
 import { InputBuilder } from "../components/builder/input-builder";
 import { NumberBuilder } from "../components/builder/number-builder";
 import { SelectBuilder } from "../components/builder/select-builder";
@@ -87,6 +87,7 @@ export const COMPONENTS_DEFINITION: Readonly<
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const COMPONENTS_SCHEMAS: Record<ComponentNameType, z.ZodObject<any>> = {
   table: TableSchema,
   text: TextSchema,
@@ -98,46 +99,84 @@ export const COMPONENTS_SCHEMAS: Record<ComponentNameType, z.ZodObject<any>> = {
   container: ContainerSchema,
 };
 
-export const COMPONENTS_DEFAULT_ATTRIBUTES: Record<
-  ComponentNameType,
-  IComponent["attributes"]
-> = {
+export const COMPONENTS_DEFAULT_DATA: Record<ComponentNameType, IComponent> = {
   table: {
-    title: "Table",
-    data: "",
-  } as TableAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      title: "Table",
+      data: "",
+    },
+  } as IComponent<TableAttributes>,
   text: {
-    text: "Texto",
-    color: "#000000",
-    size: FontSize["text-base"],
-  } as TextAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      text: "Texto",
+      color: "#000000",
+      size: FontSize["text-base"],
+    },
+  } as IComponent<TextAttributes>,
   button: {
-    text: "Button",
-    size: FontSize["text-base"],
-  } as ButtonAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      text: "Button",
+      size: FontSize["text-base"],
+    },
+  } as IComponent<ButtonAttributes>,
   input: {
-    label: "Label",
-  } as InputAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      label: "Label",
+    },
+  } as IComponent<InputAttributes>,
   form: {
-    data: "",
-  } as FormAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      data: "",
+    },
+    children: [],
+  } as IComponent<FormAttributes>,
   select: {
-    placeholder: "Seleccione",
-  } as SelectAttributes,
-  number: {} as NumberAttributes,
-  container: {} as ContainerAttributes,
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {
+      placeholder: "Seleccione",
+    },
+  } as IComponent<SelectAttributes>,
+  number: {
+    id: "",
+    type: "",
+    valid: true,
+  } as IComponent<NumberType>,
+  container: {
+    id: "",
+    type: "",
+    valid: true,
+    attributes: {},
+    children: [],
+  } as IComponent<ContainerAttributes>,
 };
 
 export const COMPONENTS_JSX_ELEMENTS: Record<
   ComponentNameType,
-  React.ComponentType<{ component: IComponent<any>; path?: string }>
+  React.ComponentType<{ component: IComponent; path?: string }>
 > = {
-  table: InputBuilder as any,
-  text: InputBuilder as any,
-  button: InputBuilder as any,
-  input: InputBuilder as any,
-  form: InputBuilder as any,
-  select: SelectBuilder as any,
-  number: NumberBuilder as any,
-  container: ContainerBuilder as any,
+  table: InputBuilder as never,
+  text: InputBuilder as never,
+  button: InputBuilder as never,
+  input: InputBuilder as never,
+  form: InputBuilder as never,
+  select: SelectBuilder as never,
+  number: NumberBuilder as never,
+  container: ContainerBuilder as never,
 };
