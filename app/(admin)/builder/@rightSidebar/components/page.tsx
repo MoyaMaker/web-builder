@@ -50,8 +50,7 @@ const FormComponentAttributes = () => {
 
   const onSubmit: SubmitHandler<InferType> = useCallback(
     (data) => {
-      console.log(selectedComponent!.id, true, data);
-      updateComponentAttributes(selectedComponent!.id, true, data);
+      updateComponentAttributes(selectedComponent!, true, data);
     },
     [selectedComponent, updateComponentAttributes]
   );
@@ -60,7 +59,7 @@ const FormComponentAttributes = () => {
     (error) => {
       console.error(error);
       console.log(selectedComponent!.id, false, form.watch());
-      updateComponentAttributes(selectedComponent!.id, false, form.watch());
+      updateComponentAttributes(selectedComponent!, false, form.watch());
     },
     [form, selectedComponent, updateComponentAttributes]
   );

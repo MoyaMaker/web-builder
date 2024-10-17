@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { ComponentNameType } from "@/lib/constants/components-definition";
 import { useTreeComponents } from "@/lib/providers/tree-components-provider";
 import { IComponent } from "@/lib/schemas/component-base-schema";
-import { getPathArray } from "@/lib/helpers/path-helpers";
+// import { getPathArray } from "@/lib/helpers/path-helpers";
 
 export function DropContainer({
   path,
@@ -30,19 +30,19 @@ export function DropContainer({
     canDrop: (item, monitor) => {
       const itemType = monitor.getItemType();
       if (itemType === "COMPONENT") {
-        const { path: actualPath } = item as {
-          path: string;
-        };
-        if (actualPath === path) return false;
+        // const { path: actualPath } = item as {
+        //   path: string;
+        // };
+        // if (actualPath === path) return false;
 
-        const draggedParts = getPathArray(actualPath);
-        const dropParts = getPathArray(path);
+        // const draggedParts = getPathArray(actualPath);
+        // const dropParts = getPathArray(path);
 
-        if (actualPath.length === path.length) {
-          const draggedIndex = draggedParts[draggedParts.length - 1];
-          const droppedIndex = dropParts[dropParts.length - 1];
-          if (draggedIndex + 1 === droppedIndex) return false;
-        }
+        // if (actualPath.length === path.length) {
+        //   const draggedIndex = draggedParts[draggedParts.length - 1];
+        //   const droppedIndex = dropParts[dropParts.length - 1];
+        //   if (draggedIndex + 1 === droppedIndex) return false;
+        // }
 
         return true;
       }
@@ -70,6 +70,7 @@ export function DropContainer({
   return (
     <div
       ref={ref}
+      data-path={path}
       className={cn(
         "w-full min-h-4 text-xs",
         isOver && canDrop && "bg-green-500/50",

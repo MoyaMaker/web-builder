@@ -26,6 +26,21 @@ export function getPath(
   return undefined;
 }
 
+export function replaceAtPath(
+  component: IComponent,
+  path: string,
+  components: IComponent[]
+) {
+  const pathArray = getPathArray(path);
+  let children = components;
+
+  for (let i = 0; i < pathArray.length - 1; i++) {
+    children = children[pathArray[i]].children!;
+  }
+
+  children.splice(pathArray[pathArray.length - 1], 1, component);
+}
+
 export function insertAtPath(
   component: IComponent,
   path: string,

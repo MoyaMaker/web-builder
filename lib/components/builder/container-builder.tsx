@@ -15,10 +15,7 @@ export function ContainerBuilder({
 
   return (
     <div className="border border-dashed border-zinc-200 dark:border-zinc-800">
-      <BuilderComponent
-        components={children}
-        path={`${path}-${children?.length ?? 0}`}
-      />
+      <BuilderComponent components={children} path={path} />
       <DropContainer
         className={cn(!children?.length && "min-h-6")}
         path={`${path}-${children?.length ?? 0}`}

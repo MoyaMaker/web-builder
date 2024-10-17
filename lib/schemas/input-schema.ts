@@ -31,11 +31,11 @@ export const InputAttributesSchema = z.object({
     .boolean()
     .optional()
     .describe("Boolean" as FormElementType),
-  maxLength: z
+  maxLength: z.coerce
     .number()
     .optional()
     .describe("Number" as FormElementType),
-  minLength: z
+  minLength: z.coerce
     .number()
     .optional()
     .describe("Number" as FormElementType),

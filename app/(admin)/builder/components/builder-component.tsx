@@ -1,4 +1,8 @@
 "use client";
+import { useRef } from "react";
+import { useDrag } from "react-dnd";
+import { CopyIcon, Trash2Icon } from "lucide-react";
+
 import { useTreeComponents } from "@/lib/providers/tree-components-provider";
 import {
   ComponentNameType,
@@ -8,10 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { IComponent } from "@/lib/schemas/component-base-schema";
 import { Button } from "@/lib/components/ui/button";
-import { CopyIcon, Trash2Icon } from "lucide-react";
 import { DropContainer } from "@/lib/components/builder/drop-container";
-import { useEffect, useRef, useState } from "react";
-import { useDrag } from "react-dnd";
 
 export function BuilderComponent({
   path,
@@ -23,7 +24,7 @@ export function BuilderComponent({
   return components?.map((component, index) => (
     <DraggableComponent
       key={component.id}
-      path={path ?? index.toString()}
+      path={path ? `${path}-${index}` : index.toString()}
       component={component}
     />
   ));
@@ -36,12 +37,12 @@ const DraggableComponent = ({
   path: string;
   component: IComponent;
 }) => {
-  const { isSelecting, setSelectedComponent } = useTreeComponents();
+  const { setSelectedComponent } = useTreeComponents();
   const ref = useRef<HTMLDivElement>(null);
   const type = component.type as ComponentNameType;
   const Element = COMPONENTS_JSX_ELEMENTS[type];
 
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
 
   const [{ isDragging }, drag] = useDrag({
     type: "COMPONENT",
@@ -56,27 +57,11 @@ const DraggableComponent = ({
 
   drag(ref);
 
-  const handleMouseEnter = () => {
-    if (isSelecting && !isDragging) setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (isSelecting && !isDragging) setIsHovered(false);
-  };
-
-  useEffect(() => {
-    if (isDragging) {
-      setIsHovered(false);
-    }
-  }, [isDragging]);
-
   return (
     <div id={component.id}>
       <DropContainer path={path} />
       <div
         ref={ref}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         className={cn(
           "relative hover:cursor-pointer group",
           isDragging && "opacity-30 pointer-events-none"
@@ -86,13 +71,6 @@ const DraggableComponent = ({
           e.stopPropagation();
         }}
       >
-        {isHovered && (
-          <div
-            className={cn(
-              "absolute w-full h-full group-hover:ring-1 group-hover:ring-white pointer-events-none bg-white/10"
-            )}
-          />
-        )}
         {!isDragging && <SelectedComponent component={component} />}
         <Element component={component} path={path} />
       </div>
