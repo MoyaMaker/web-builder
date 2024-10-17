@@ -29,6 +29,7 @@ import {
   ContainerAttributes,
   ContainerSchema,
 } from "../schemas/container-schema";
+import { TextBuilder } from "../components/builder/text-builder";
 
 export type ComponentDefinition = {
   name: string;
@@ -116,7 +117,7 @@ export const COMPONENTS_DEFAULT_DATA: Record<ComponentNameType, IComponent> = {
     attributes: {
       text: "Texto",
       color: "#000000",
-      size: FontSize["text-base"],
+      size: FontSize.TextBase,
     },
   } as IComponent<TextAttributes>,
   button: {
@@ -125,7 +126,7 @@ export const COMPONENTS_DEFAULT_DATA: Record<ComponentNameType, IComponent> = {
     valid: true,
     attributes: {
       text: "Button",
-      size: FontSize["text-base"],
+      size: FontSize.TextBase,
     },
   } as IComponent<ButtonAttributes>,
   input: {
@@ -172,7 +173,7 @@ export const COMPONENTS_JSX_ELEMENTS: Record<
   React.ComponentType<{ component: IComponent; path?: string }>
 > = {
   table: InputBuilder as never,
-  text: InputBuilder as never,
+  text: TextBuilder as never,
   button: InputBuilder as never,
   input: InputBuilder as never,
   form: InputBuilder as never,

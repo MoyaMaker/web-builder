@@ -58,7 +58,6 @@ const FormComponentAttributes = () => {
   const onError: SubmitErrorHandler<InferType> = useCallback(
     (error) => {
       console.error(error);
-      console.log(selectedComponent!.id, false, form.watch());
       updateComponentAttributes(selectedComponent!, false, form.watch());
     },
     [form, selectedComponent, updateComponentAttributes]

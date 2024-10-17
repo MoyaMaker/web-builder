@@ -19,16 +19,25 @@ import {
 } from "@/lib/components/ui/popover";
 
 type ComboboxProps = {
+  className?: string;
   placeholder?: string;
+  defaultValue?: string;
   items: {
     label: string;
     value: string;
   }[];
+  onChange(value: string): void;
 };
 
-export function Combobox({ placeholder, items }: ComboboxProps) {
+export function Combobox({
+  className,
+  placeholder = "Buscar",
+  defaultValue = "",
+  items,
+  onChange,
+}: ComboboxProps) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,17 +46,22 @@ export function Combobox({ placeholder, items }: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={cn(
+            "w-full justify-between [font-size:inherit] [line-height:inherit]",
+            className
+          )}
         >
-          {value
-            ? items.find((item) => item.value === value)?.label
-            : placeholder}
+          <span className="truncate">
+            {value
+              ? items.find((item) => item.value === value)?.label
+              : placeholder}
+          </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="p-0 [font-size:inherit] [line-height:inherit]">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder={placeholder} />
           <CommandList>
             <CommandEmpty>Sin resultados</CommandEmpty>
             <CommandGroup>
@@ -56,9 +70,12 @@ export function Combobox({ placeholder, items }: ComboboxProps) {
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    const newValue = currentValue === value ? "" : currentValue;
+                    setValue(newValue);
+                    onChange(newValue);
                     setOpen(false);
                   }}
+                  className="[font-size:inherit] [line-height:inherit]"
                 >
                   <Check
                     className={cn(

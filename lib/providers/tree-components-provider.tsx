@@ -65,12 +65,7 @@ export const TreeComponentsProvider: React.FC<{
     };
 
     // Generate component data
-    const componentParse = schema.safeParse({
-      id: `${type}_${generateId()}`,
-      type,
-      attributes: {},
-      valid: true,
-    });
+    const componentParse = schema.safeParse(component);
 
     component.valid = componentParse.success;
 

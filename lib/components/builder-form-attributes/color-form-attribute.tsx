@@ -1,9 +1,7 @@
-"use client";
 import { Controller, useFormContext } from "react-hook-form";
-
 import { Input } from "../ui/input";
 
-export function TextFormAttribute({ name }: { name: string }) {
+export function ColorFormAttribute({ name }: { name: string }) {
   const { control } = useFormContext();
 
   return (
@@ -13,7 +11,7 @@ export function TextFormAttribute({ name }: { name: string }) {
       render={({ field }) => (
         <Input
           id={name}
-          type="text"
+          type="color"
           {...field}
           className="h-8 py-1 [font-size:inherit] [line-height:inherit]"
         />
