@@ -10,6 +10,12 @@ import { cn } from "@/lib/utils";
 import { useTreeComponents } from "@/lib/providers/tree-components-provider";
 import { BuilderComponent } from "./components/builder-component";
 import { DropContainer } from "@/lib/components/builder/drop-container";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/lib/components/ui/tabs";
 
 export default function Builder() {
   const ref = useRef<HTMLDivElement>(null);
@@ -25,29 +31,45 @@ export default function Builder() {
   drop(ref);
 
   return (
-    <section className="w-full h-full flex flex-col px-2 pb-1">
-      <header className="h-14 flex items-center flex-shrink-0 gap-2 ">
-        <OpenLeftSidebar />
-        <div className="flex-1">
-          <h3 className="text-lg">Builder</h3>
-        </div>
-        <OpenRightSidebar />
-      </header>
+    <Tabs defaultValue="designer" className="h-full">
+      <section className="w-full h-full flex flex-col px-2 pb-1">
+        <header className="h-14 flex items-center flex-shrink-0 gap-2 ">
+          <OpenLeftSidebar />
+          <div className="flex-1 flex items-center justify-between">
+            <h3 className="text-lg flex-1">Builder</h3>
 
-      <div
-        ref={ref}
-        className={cn(
-          "h-full flex relative flex-col border-2 border-dashed px-4",
-          isOver ? "border-green-500" : "border-zinc-200 dark:border-zinc-800"
-        )}
-        onClick={() => setSelectedComponent(undefined)}
-      >
-        <BuilderComponent components={components} />
-        <DropContainer path={components?.length?.toString() ?? "0"} isLast />
-      </div>
-      <div>
-        <pre className="text-xs">{JSON.stringify(components, null, 2)}</pre>
-      </div>
-    </section>
+            <TabsList>
+              <TabsTrigger value="designer">Diseñador</TabsTrigger>
+              <TabsTrigger value="data">Datos</TabsTrigger>
+            </TabsList>
+          </div>
+          <OpenRightSidebar />
+        </header>
+
+        <TabsContent value="designer" className="h-full m-0">
+          <div
+            ref={ref}
+            className={cn(
+              "h-full flex relative flex-col border-2 border-dashed px-4",
+              isOver
+                ? "border-green-500"
+                : "border-zinc-200 dark:border-zinc-800"
+            )}
+            onClick={() => setSelectedComponent(undefined)}
+          >
+            <BuilderComponent components={components} />
+            <DropContainer
+              path={components?.length?.toString() ?? "0"}
+              isLast
+            />
+          </div>
+        </TabsContent>
+        <TabsContent value="data" className="h-full m-0">
+          <div className="h-full border-2 border-zinc-200 dark:border-zinc-800 border-dashed px-4 py-2">
+            <pre className="text-xs">{JSON.stringify(components, null, 2)}</pre>
+          </div>
+        </TabsContent>
+      </section>
+    </Tabs>
   );
 }
