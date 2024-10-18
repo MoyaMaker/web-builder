@@ -19,6 +19,7 @@ import {
 } from "@/lib/components/ui/popover";
 
 type ComboboxProps = {
+  id?: string;
   className?: string;
   placeholder?: string;
   defaultValue?: string;
@@ -26,14 +27,17 @@ type ComboboxProps = {
     label: string;
     value: string;
   }[];
+  disabled?: boolean;
   onChange(value: string): void;
 };
 
 export function Combobox({
+  id,
   className,
   placeholder = "Buscar",
   defaultValue = "",
   items,
+  disabled = false,
   onChange,
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
@@ -43,6 +47,7 @@ export function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
@@ -50,6 +55,8 @@ export function Combobox({
             "w-full justify-between [font-size:inherit] [line-height:inherit]",
             className
           )}
+          disabled={disabled}
+          aria-disabled={disabled}
         >
           <span className="truncate">
             {value

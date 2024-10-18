@@ -1,9 +1,25 @@
 import { z } from "zod";
 
 import { ComponentBaseSchema } from "./component-base-schema";
+import { FormElementType } from "../constants/form-elements-definition";
 
 export const SelectAttributesSchema = z.object({
-  placeholder: z.string().optional(),
+  label: z
+    .string()
+    .optional()
+    .describe("Text" as FormElementType),
+  placeholder: z
+    .string()
+    .optional()
+    .describe("Text" as FormElementType),
+  required: z
+    .boolean()
+    .optional()
+    .describe("Boolean" as FormElementType),
+  disabled: z
+    .boolean()
+    .optional()
+    .describe("Boolean" as FormElementType),
 });
 
 export const SelectSchema = ComponentBaseSchema.extend({
