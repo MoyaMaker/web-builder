@@ -1,9 +1,16 @@
 import { z } from "zod";
 import { ComponentBaseSchema } from "./component-base-schema";
+import { FormElementType } from "../constants/form-elements-definition";
 
 export const TableAttributesSchema = z.object({
-  title: z.string().optional(),
-  data: z.string().min(1),
+  title: z
+    .string()
+    .optional()
+    .describe("Text" as FormElementType),
+  searchable: z
+    .boolean()
+    .optional()
+    .describe("Boolean" as FormElementType),
 });
 
 export const TableSchema = ComponentBaseSchema.extend({

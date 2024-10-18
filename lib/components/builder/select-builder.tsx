@@ -11,7 +11,7 @@ export function SelectBuilder({
 
   return (
     <fieldset className="pointer-events-none">
-      <Combobox {...attributes} items={[]} />;
+      <Combobox {...attributes} items={[]} onChange={() => {}} />
     </fieldset>
   );
 }

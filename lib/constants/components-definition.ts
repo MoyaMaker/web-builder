@@ -30,6 +30,7 @@ import {
   ContainerSchema,
 } from "../schemas/container-schema";
 import { TextBuilder } from "../components/builder/text-builder";
+import { TableBuilder } from "../components/builder/table-builder";
 
 export type ComponentDefinition = {
   name: string;
@@ -172,7 +173,7 @@ export const COMPONENTS_JSX_ELEMENTS: Record<
   ComponentNameType,
   React.ComponentType<{ component: IComponent; path?: string }>
 > = {
-  table: InputBuilder as never,
+  table: TableBuilder as never,
   text: TextBuilder as never,
   button: InputBuilder as never,
   input: InputBuilder as never,
