@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/lib/components/mode-toggle";
 import { Button } from "@/lib/components/ui/button";
 
-import Providers from "@/lib/providers";
+import Providers from "@/lib/providers/global";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
