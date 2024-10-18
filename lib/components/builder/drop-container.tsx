@@ -4,9 +4,8 @@ import { useDrop } from "react-dnd";
 
 import { cn } from "@/lib/utils";
 import { ComponentNameType } from "@/lib/constants/components-definition";
-import { useTreeComponents } from "@/lib/providers/tree-components-provider";
+import { useComponentsStore } from "@/lib/stores/components-store";
 import { IComponent } from "@/lib/schemas/component-base-schema";
-// import { getPathArray } from "@/lib/helpers/path-helpers";
 
 export function DropContainer({
   path,
@@ -18,7 +17,7 @@ export function DropContainer({
   className?: string;
   isLast?: boolean;
 }) {
-  const { createComponent, moveComponent } = useTreeComponents();
+  const { createComponent, moveComponent } = useComponentsStore();
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isOver, canDrop }, drop] = useDrop({

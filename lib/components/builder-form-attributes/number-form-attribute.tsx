@@ -14,6 +14,7 @@ export function NumberFormAttribute({ name }: { name: string }) {
           id={name}
           type="number"
           {...field}
+          value={field.value ?? ""}
           className="h-8 py-1 [font-size:inherit] [line-height:inherit]"
         />
       )}

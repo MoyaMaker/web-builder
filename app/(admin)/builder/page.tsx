@@ -7,7 +7,6 @@ import {
   OpenRightSidebar,
 } from "./components/open-sidebar-button";
 import { cn } from "@/lib/utils";
-import { useTreeComponents } from "@/lib/providers/tree-components-provider";
 import { BuilderComponent } from "./components/builder-component";
 import { DropContainer } from "@/lib/components/builder/drop-container";
 import {
@@ -16,10 +15,11 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/lib/components/ui/tabs";
+import { useComponentsStore } from "@/lib/stores/components-store";
 
 export default function Builder() {
   const ref = useRef<HTMLDivElement>(null);
-  const { components, setSelectedComponent } = useTreeComponents();
+  const { components, setSelectedComponent } = useComponentsStore();
 
   const [{ isOver }, drop] = useDrop({
     accept: ["NEW_COMPONENT", "COMPONENT"],

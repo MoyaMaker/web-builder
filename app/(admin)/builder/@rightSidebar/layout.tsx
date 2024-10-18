@@ -13,7 +13,7 @@ import {
 import { ResizablePanel } from "@/lib/components/ui/resizable";
 import { ScrollArea } from "@/lib/components/ui/scroll-area";
 import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
-import { useTreeComponents } from "@/lib/providers/tree-components-provider";
+import { useComponentsStore } from "@/lib/stores/components-store";
 import {
   ComponentNameType,
   COMPONENTS_DEFINITION,
@@ -24,7 +24,7 @@ export default function LeftSidebarLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { selectedComponent } = useTreeComponents();
+  const { selectedComponent } = useComponentsStore();
   const refRightSidebar = useRef<ImperativePanelHandle>(null);
   const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayout();
 

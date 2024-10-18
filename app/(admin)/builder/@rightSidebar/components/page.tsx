@@ -7,13 +7,13 @@ import {
   useForm,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useComponentsStore } from "@/lib/stores/components-store";
 import { Label } from "@/lib/components/ui/label";
 import {
   ComponentNameType,
   COMPONENTS_SCHEMAS,
 } from "@/lib/constants/components-definition";
-import { useTreeComponents } from "@/lib/providers/tree-components-provider";
+
 import {
   FORM_ELEMENTS_DEFINITION,
   FormElementType,
@@ -21,7 +21,7 @@ import {
 import { useCallback, useEffect } from "react";
 
 export default function ComponentsSection() {
-  const { selectedComponent } = useTreeComponents();
+  const { selectedComponent } = useComponentsStore();
 
   return (
     <div className="">
@@ -33,7 +33,7 @@ export default function ComponentsSection() {
 }
 
 const FormComponentAttributes = () => {
-  const { selectedComponent, updateComponentAttributes } = useTreeComponents();
+  const { selectedComponent, updateComponentAttributes } = useComponentsStore();
 
   const schema =
     COMPONENTS_SCHEMAS[selectedComponent?.type as ComponentNameType];

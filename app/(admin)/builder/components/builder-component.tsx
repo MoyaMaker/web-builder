@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useDrag } from "react-dnd";
 import { CopyIcon, Trash2Icon } from "lucide-react";
 
-import { useTreeComponents } from "@/lib/providers/tree-components-provider";
+import { useComponentsStore } from "@/lib/stores/components-store";
 import {
   ComponentNameType,
   COMPONENTS_DEFINITION,
@@ -37,7 +37,7 @@ const DraggableComponent = ({
   path: string;
   component: IComponent;
 }) => {
-  const { setSelectedComponent } = useTreeComponents();
+  const { setSelectedComponent } = useComponentsStore();
   const ref = useRef<HTMLDivElement>(null);
   const type = component.type as ComponentNameType;
   const Element = COMPONENTS_JSX_ELEMENTS[type];
@@ -81,7 +81,7 @@ const DraggableComponent = ({
 const SelectedComponent = ({ component }: { component: IComponent }) => {
   const { id, type, valid } = component;
   const { selectedComponent, copyComponent, removeComponent } =
-    useTreeComponents();
+    useComponentsStore();
   const componentDefinition = COMPONENTS_DEFINITION[type as ComponentNameType];
 
   const isSelected = selectedComponent?.id === id;

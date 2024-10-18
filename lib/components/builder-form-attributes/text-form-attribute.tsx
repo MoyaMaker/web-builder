@@ -15,6 +15,7 @@ export function TextFormAttribute({ name }: { name: string }) {
           id={name}
           type="text"
           {...field}
+          value={field.value ?? ""}
           className="h-8 py-1 [font-size:inherit] [line-height:inherit]"
         />
       )}
