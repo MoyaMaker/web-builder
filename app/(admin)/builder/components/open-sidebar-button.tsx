@@ -7,10 +7,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/lib/components/ui/tooltip";
-import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
+import { useBuilderLayoutStore } from "@/lib/stores/builder-layout-store";
 
 export const OpenLeftSidebar = () => {
-  const { isOpenLeftSidebar, setOpenLeftSidebar } = useBuilderLayout();
+  const { isOpenLeftSidebar, setOpenLeftSidebar } = useBuilderLayoutStore();
 
   return (
     !isOpenLeftSidebar && (
@@ -31,7 +31,7 @@ export const OpenLeftSidebar = () => {
 };
 
 export const OpenRightSidebar = () => {
-  const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayout();
+  const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayoutStore();
 
   return (
     !isOpenRightSidebar && (

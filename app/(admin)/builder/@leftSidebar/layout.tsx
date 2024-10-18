@@ -1,4 +1,7 @@
 "use client";
+import { useEffect, useMemo, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Layers3Icon,
   LayoutDashboardIcon,
@@ -12,13 +15,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/lib/components/ui/tooltip";
-import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
 import { ResizablePanel } from "@/lib/components/ui/resizable";
 import { ScrollArea } from "@/lib/components/ui/scroll-area";
 import { ImperativePanelHandle } from "react-resizable-panels";
+import { useBuilderLayoutStore } from "@/lib/stores/builder-layout-store";
 
 const tabsSections = [
   {
@@ -41,7 +41,7 @@ export default function LeftSidebarLayout({
   const refLeftSidebar = useRef<ImperativePanelHandle>(null);
   const pathname = usePathname();
 
-  const { isOpenLeftSidebar, setOpenLeftSidebar } = useBuilderLayout();
+  const { isOpenLeftSidebar, setOpenLeftSidebar } = useBuilderLayoutStore();
 
   const sectionActive = useMemo(
     () =>

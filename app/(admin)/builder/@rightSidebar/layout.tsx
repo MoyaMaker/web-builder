@@ -12,12 +12,12 @@ import {
 } from "@/lib/components/ui/tooltip";
 import { ResizablePanel } from "@/lib/components/ui/resizable";
 import { ScrollArea } from "@/lib/components/ui/scroll-area";
-import { useBuilderLayout } from "@/lib/providers/builder-layout-provider";
 import { useComponentsStore } from "@/lib/stores/components-store";
 import {
   ComponentNameType,
   COMPONENTS_DEFINITION,
 } from "@/lib/constants/components-definition";
+import { useBuilderLayoutStore } from "@/lib/stores/builder-layout-store";
 
 export default function LeftSidebarLayout({
   children,
@@ -26,7 +26,7 @@ export default function LeftSidebarLayout({
 }) {
   const { selectedComponent } = useComponentsStore();
   const refRightSidebar = useRef<ImperativePanelHandle>(null);
-  const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayout();
+  const { isOpenRightSidebar, setOpenRightSidebar } = useBuilderLayoutStore();
 
   const componentName = selectedComponent?.type
     ? COMPONENTS_DEFINITION[selectedComponent.type as ComponentNameType].name
