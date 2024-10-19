@@ -164,7 +164,9 @@ export const COMPONENTS_DEFAULT_DATA: Record<ComponentNameType, IComponent> = {
     id: "",
     type: "",
     valid: true,
-    attributes: {},
+    attributes: {
+      columns: 1,
+    },
     children: [],
   } as IComponent<ContainerAttributes>,
 };
