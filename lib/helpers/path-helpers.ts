@@ -4,6 +4,17 @@ export function getPathArray(path: string) {
   return path.split("-").map((p) => parseInt(p));
 }
 
+export function getElementByPath(path: string, components: IComponent[]) {
+  const pathArray = getPathArray(path);
+  let children = components;
+
+  for (let i = 0; i < pathArray.length - 1; i++) {
+    children = children[pathArray[i]].children!;
+  }
+
+  return children[pathArray[pathArray.length - 1]];
+}
+
 export function getPath(
   componentId: string,
   components: IComponent[],

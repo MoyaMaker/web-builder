@@ -24,7 +24,7 @@ export function ContainerBuilder({
       )}
     >
       <div
-        className={cn("relative grid items-end", preview && "gap-4")}
+        className={cn("relative grid gap-x-4 items-end", preview && "gap-4")}
         style={{
           gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
         }}
