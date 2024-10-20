@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { IComponent } from "@/lib/schemas/component-base-schema";
 import { Button } from "@/lib/components/ui/button";
 import { DropContainer } from "@/lib/components/builder/drop-container";
+import { useBuilderLayoutStore } from "@/lib/stores/builder-layout-store";
 
 export function BuilderComponent({
   path,
@@ -21,28 +22,43 @@ export function BuilderComponent({
   path?: string;
   components: IComponent[] | undefined;
 }) {
-  return components?.map((component, index) => (
-    <DraggableComponent
-      key={component.id}
-      path={path ? `${path}-${index}` : index.toString()}
-      component={component}
-    />
-  ));
+  const { preview } = useBuilderLayoutStore();
+
+  return components?.map((component, index) => {
+    const type = component.type as ComponentNameType;
+    const Element = COMPONENTS_JSX_ELEMENTS[type];
+
+    const actualPath = path ? `${path}-${index}` : index.toString();
+
+    if (preview) {
+      return (
+        <Element key={component.id} component={component} path={actualPath} />
+      );
+    }
+
+    return (
+      <DraggableComponent
+        key={component.id}
+        path={actualPath}
+        component={component}
+      >
+        <Element component={component} path={actualPath} />
+      </DraggableComponent>
+    );
+  });
 }
 
 const DraggableComponent = ({
   path,
   component,
+  children,
 }: {
   path: string;
   component: IComponent;
+  children?: React.ReactNode;
 }) => {
   const { setSelectedComponent } = useComponentsStore();
   const ref = useRef<HTMLDivElement>(null);
-  const type = component.type as ComponentNameType;
-  const Element = COMPONENTS_JSX_ELEMENTS[type];
-
-  // const [isHovered, setIsHovered] = useState(false);
 
   const [{ isDragging }, drag] = useDrag({
     type: "COMPONENT",
@@ -72,7 +88,7 @@ const DraggableComponent = ({
         }}
       >
         {!isDragging && <SelectedComponent component={component} />}
-        <Element component={component} path={path} />
+        {children}
       </div>
     </div>
   );

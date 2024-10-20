@@ -16,9 +16,13 @@ import {
   TabsTrigger,
 } from "@/lib/components/ui/tabs";
 import { useComponentsStore } from "@/lib/stores/components-store";
+import { Switch } from "@/lib/components/ui/switch";
+import { useBuilderLayoutStore } from "@/lib/stores/builder-layout-store";
+import { Label } from "@/lib/components/ui/label";
 
 export default function Builder() {
   const ref = useRef<HTMLDivElement>(null);
+  const { preview, setPreview } = useBuilderLayoutStore();
   const { components, setSelectedComponent } = useComponentsStore();
 
   const [{ isOver }, drop] = useDrop({
@@ -38,6 +42,15 @@ export default function Builder() {
           <div className="flex-1 flex items-center justify-between">
             <h3 className="text-lg flex-1">Builder</h3>
 
+            <div className="flex items-center space-x-2 mr-4">
+              <Switch
+                id="preview-mode"
+                checked={preview}
+                onCheckedChange={setPreview}
+              />
+              <Label htmlFor="preview-mode">Preview</Label>
+            </div>
+
             <TabsList>
               <TabsTrigger value="designer">Diseñador</TabsTrigger>
               <TabsTrigger value="data">Datos</TabsTrigger>
@@ -51,17 +64,20 @@ export default function Builder() {
             ref={ref}
             className={cn(
               "h-full flex relative flex-col border-2 border-dashed px-4",
-              isOver
+              preview && "gap-4 py-4",
+              isOver && !preview
                 ? "border-green-500"
                 : "border-zinc-200 dark:border-zinc-800"
             )}
             onClick={() => setSelectedComponent(undefined)}
           >
             <BuilderComponent components={components} />
-            <DropContainer
-              path={components?.length?.toString() ?? "0"}
-              isLast
-            />
+            {!preview && (
+              <DropContainer
+                path={components?.length?.toString() ?? "0"}
+                isLast
+              />
+            )}
           </div>
         </TabsContent>
         <TabsContent value="data" className="h-full m-0">
