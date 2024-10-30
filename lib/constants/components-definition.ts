@@ -31,6 +31,7 @@ import {
 } from "../schemas/container-schema";
 import { TextBuilder } from "../components/builder/text-builder";
 import { TableBuilder } from "../components/builder/table-builder";
+import { ButtonBuilder } from "../components/builder/button-builder";
 
 export type ComponentDefinition = {
   name: string;
@@ -177,7 +178,7 @@ export const COMPONENTS_JSX_ELEMENTS: Record<
 > = {
   table: TableBuilder as never,
   text: TextBuilder as never,
-  button: InputBuilder as never,
+  button: ButtonBuilder as never,
   input: InputBuilder as never,
   form: InputBuilder as never,
   select: SelectBuilder as never,

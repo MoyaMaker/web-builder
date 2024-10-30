@@ -3,13 +3,15 @@ import { BooleanFormAttribute } from "../components/builder-form-attributes/bool
 import { NumberFormAttribute } from "../components/builder-form-attributes/number-form-attribute";
 import { ColorFormAttribute } from "../components/builder-form-attributes/color-form-attribute";
 import { FontSizeFormAttribute } from "../components/builder-form-attributes/font-size-form-attribute";
+import { ButtonStyleFormAttribute } from "../components/builder-form-attributes/button-style-form-attribute";
 
 export type FormElementType =
   | "Text"
   | "Boolean"
   | "Number"
   | "Color"
-  | "FontSize";
+  | "FontSize"
+  | "ButtonStyle";
 
 export const FORM_ELEMENTS_DEFINITION: Record<
   FormElementType,
@@ -22,4 +24,5 @@ export const FORM_ELEMENTS_DEFINITION: Record<
   Number: NumberFormAttribute,
   Color: ColorFormAttribute,
   FontSize: FontSizeFormAttribute,
+  ButtonStyle: ButtonStyleFormAttribute,
 };
